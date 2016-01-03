@@ -1,0 +1,79 @@
+(use 'brisk.core)
+(use 'brisk.router)
+
+(def optional-parameters "[String: AnyObject]?")
+(def parameters "[String: AnyObject]")
+
+(output-path! "~/ParseRouter/")
+
+(router! ParseRouter "http://api.parse.com/1/"
+
+  ;; Objects
+  (POST CreateObject "classes/[className]", {:className :String, :parameters optional-parameters})
+  (GET GetObject "classes/[className]/[objectId]", {:className :String, :objectId :String})
+  (PUT UpdateObject "classes/[className]/[objectId]", {:className :String, :objectId :String, :parameters optional-parameters})
+  (GET QueryObjects "classes/[className]", {:className :String, :parameters optional-parameters})
+  (DELETE DeleteObject "classes/[className]/[objectId]", {:className :String, :objectId :String})
+
+  ;; Users
+  (POST Signup "users" {:username :String, :password :String, :parameters optional-parameters})
+  (GET Login "login" {:username :String, :password :String})
+  (POST Logout "logout")
+  (GET GetUser "users/[objectId]" {:objectId :String})
+  (GET GetMe "users/me")
+  (PUT UpdateUser "users/[objectId]" {:objectId :String})
+  (GET QueryUsers "users" {:parameters optional-parameters})
+  (DELETE DeleteUser "users/[objectId]" {:objectId :String})
+  (POST RequestPasswordReset "requestPasswordReset" {:email :String})
+
+  ;; Roles
+  (POST CreateRole "roles" {:parameters optional-parameters})
+  (GET GetRole "roles/[objectId]" {:objectId :String})
+  (PUT UpdateRole "roles/[objectId]" {:objectId :String, :parameters optional-parameters})
+  (DELETE DeleteRole "roles/[objectId]" {:objectId :String})
+
+  ;; Files
+  ;; TODO - Multipart
+
+  ;; Analytics
+  (POST LogAppOpened "events/AppOpened")
+  (POST LogEvent "events/[eventName]", {:eventName :String, :parameters optional-parameters})
+
+  ;; Push Notifications
+  (POST Push "push" {:parameters parameters})
+
+  ;; Installation
+  (POST CreateInstallation "installation" {:parameters optional-parameters})
+  (GET GetInstallation "installation/[objectId]" {:objectId :String})
+  (PUT UpdateInstallation "installation/[objectId]" {:objectId :String, :parameters optional-parameters})
+  (GET QueryInstallations "installations" {:parameters optional-parameters})
+  (DELETE DeleteInstallation "installations/[objectId]" {:objectId :String})
+
+  ;; Cloud Functions
+  (POST CallCloudFunction "functions/[name]" {:name :String, :parameters optional-parameters})
+  (POST TriggerBackgroundJob "jobs/[name]" {:name :String, :parameters optional-parameters})
+
+  ;; Schemas
+  (GET GetSchema "schemas/[className]" {:className :String})
+  (GET CreateSchema "schemas/[className]" {:className :String, :parameters optional-parameters})
+  (GET UpdateSchema "schemas/[className]" {:className :String, :parameters optional-parameters})
+  (GET DeleteSchema "schemas/[className]" {:className :String})
+
+  ;; Apps
+  (GET GetApps "apps")
+  (GET GetApp "apps/[applicationId]" {:applicationId :String})
+  (POST CreateApp "apps/[applicationId]" {:applicationId :String, :parameters optional-parameters})
+  (PUT UpdateApp "apps/[applicationId]" {:applicationId :String, :parameters optional-parameters})
+
+  ;; Function Hooks
+  (GET GetFunctions "hooks/functions" {:parameters optional-parameters})
+  (GET GetFunction "hooks/functions/[functionName]" {:functionName :String})
+  (POST CreateFunction "hooks/functions" {:functionName :String, :parameters optional-parameters})
+  (PUT UpdateFunction "hooks/functions/[functionName]" {:functionName :String, :parameters optional-parameters})
+  (DELETE DeleteFunction "hooks/functions/[functionName]" {:functionName :String})
+
+  ;; Trigger Hooks
+  (GET GetTriggers "hooks/triggers/[className]/[triggerName]" {:className :String, :triggerName :String})
+  (POST CreateTrigger "hooks/triggers" {:className :String, :triggerName :String, :parameters optional-parameters})
+  (PUT UpdateTrigger "hooks/triggers/[className]/[triggerName]" {:className :String, :triggerName :String, :parameters parameters})
+  (DELETE DeleteTrigger "hooks/triggers/[className]/[triggerName]" {:className :String, :triggerName :String}))
